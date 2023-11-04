@@ -1,30 +1,43 @@
 #!/usr/bin/python
 
-# Would using the queue library to lessen stress in a multithreaded scan be performant?
-# would the user notice?
-# could I use asyncio?
-# find an instance where if the scanner is detected, we kill the process with kill()
-# download the files, perhaps compressing them? If there are too many, it might take a long time, thus
-# taxing cpu. put on a file limit
-# Reference for the jitter methods: https://www.agora.io/en/blog/what-is-jitter-meaning-causes-and-solutions/
+import argparse
+# import ipaddress
+# import logging
+# import os
+from impacket import smb
 
-import getpass
-import ipaddress
-import logging
-import os
-import re
-import sys
-import time
 
-from impacket.smb import SMB_DIALECT
-from slugify import slugify
-from logging import handlers #import logging.handlers as handlers
+# I want to eventually scan a whole ip/subnet for open smb shares
 
-from arg_parser import setup_command_line_args, Options
-from scan import scan_single, User
+# def get_network():
+#
+#     ipaddress.ip_network()
 
-from multiprocessing.pool import Pool
-from multiprocessing.pool import ThreadPool
-# from multiprocessing import Process, Queue
-from multiprocessing import set_start_method
-from threading import Thread
+def scan_smb(host, username, password):
+    try:
+        smb_client = smb.SMB('SMBSERVER', host)
+        smb_client.login(username, password)
+
+        shares = smb_client.get_client_name()
+        for share in shares:
+            print(f"Share name: {share['shi1_netname']}, Type: {share['shi1_type']}")
+
+    except smb.SessionError as e:
+        print(f"Failed to connect to {host}: {str(e)}")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="SMB Scanner")
+    parser.add_argument('-o', '--host', help="Target host or IP address")
+    parser.add_argument('-u', '--username', required=False, help="Username for authentication")
+    parser.add_argument('-p', '--password',  required=False,  help="Password for authentication")
+
+    args = parser.parse_args()
+
+    scan_smb(args.host, args.username, args.password)
+
+
+if __name__ == "__main__":
+    main()
