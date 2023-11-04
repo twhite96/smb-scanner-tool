@@ -20,7 +20,7 @@ def scan_smb(host, username, password):
 
         shares = smb_client.get_client_name()
         for share in shares:
-            print(f"Share name: {share['shi1_netname']}, Type: {share['shi1_type']}")
+            print(f'Share name: {share["shi1_netname"]}, Type: {share["shi1_type"]}')
 
     except smb.SessionError as e:
         print(f"Failed to connect to {host}: {str(e)}")
