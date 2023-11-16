@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
-import argparse
-# import ipaddress
-# import logging
-# import os
+import ipaddress
+import logging
+import os
 from impacket import smb
 
 
@@ -29,14 +28,7 @@ def scan_smb(host, username, password):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="SMB Scanner")
-    parser.add_argument('-o', '--host', help="Target host or IP address")
-    parser.add_argument('-u', '--username', required=False, help="Username for authentication")
-    parser.add_argument('-p', '--password',  required=False,  help="Password for authentication")
-
-    args = parser.parse_args()
-
-    scan_smb(args.host, args.username, args.password)
+    pass
 
 
 if __name__ == "__main__":
